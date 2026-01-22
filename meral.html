@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İyi Ki Doğdun Meral</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  height:100vh;
+  background:radial-gradient(circle at top,#ffd6e8,#b983ff);
+  font-family:'Georgia',serif;
+  overflow:hidden;
+  color:#fff;
+  text-align:center;
+}
+
+h1{
+  margin-top:20px;
+  font-size:28px;
+}
+
+#lineBox{
+  width:90%;
+  max-width:420px;
+  margin:20px auto;
+}
+
+.line{
+  background:rgba(255,255,255,.9);
+  color:#5a2a5a;
+  margin:14px 0;
+  padding:16px;
+  border-radius:18px;
+  font-size:16px;
+  animation:fadeIn .8s ease forwards;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1}
+}
+
+#flower{
+  position:absolute;
+  bottom:10px;
+  left:50%;
+  transform:translateX(-50%) scale(0);
+  font-size:120px;
+  animation:grow 3s ease forwards;
+  cursor:pointer;
+}
+
+@keyframes grow{
+  0%{transform:translateX(-50%) scale(0)}
+  60%{transform:translateX(-50%) scale(1.2)}
+  100%{transform:translateX(-50%) scale(1)}
+}
+
+.petal{
+  position:absolute;
+  font-size:28px;
+  animation:float 10s linear infinite;
+}
+
+@keyframes float{
+  to{transform:translateY(-120vh) rotate(360deg)}
+}
+
+.heart{
+  position:absolute;
+  font-size:20px;
+  animation:rise 8s linear infinite;
+}
+
+@keyframes rise{
+  to{transform:translateY(-120vh);opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<h1>🌸 İyi Ki Doğdun Meral 🌸</h1>
+<div id="lineBox"></div>
+<div id="flower" onclick="flowerClick()">🌷</div>
+
+<audio autoplay loop>
+<source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Keys_of_Moon/Emotional/Keys_of_Moon_-_Tenderness.mp3">
+</audio>
+
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<script>
+/* ================= EMAILJS ================= */
+
+// BURALARI DOLDUR
+const PUBLIC_KEY = "Ah-U6bLl0c8N9vY8z";
+const SERVICE_ID = "service_1";
+const TEMPLATE_ID = "template_1";
+
+(function(){
+  emailjs.init(PUBLIC_KEY);
+})();
+
+function sendMail(action){
+  emailjs.send(SERVICE_ID, TEMPLATE_ID, {
+    action: action,
+    message: "Meral doğum günü sitesi etkileşimi",
+    time: new Date().toLocaleString(),
+    from_name: "Muzamel"
+  }).then(
+    res => console.log("Mail gönderildi", res.status),
+    err => console.error("Mail hatası", err)
+  );
+}
+
+// Sayfa açılınca mail
+window.addEventListener("load", ()=>{
+  sendMail("Sayfa açıldı");
+});
+
+/* ================= METİNLER ================= */
+
+const texts=[
+  "Sevgili Meral,",
+  "Bu dünya seni tanıdığı için biraz daha güzel.",
+  "Gülüşün, zamana bile iyi geliyor.",
+  "İyi ki varsın.",
+  "Doğum günün kutlu olsun! 🎉",
+  
+];
+
+let i=0;
+function typeLine(text){
+  const box=document.getElementById("lineBox");
+  const div=document.createElement("div");
+  div.className="line";
+  box.appendChild(div);
+
+  let j=0;
+  const int=setInterval(()=>{
+    div.textContent+=text[j++];
+    if(j===text.length){
+      clearInterval(int);
+      if(++i<texts.length)
+        setTimeout(()=>typeLine(texts[i]),600);
+    }
+  },45);
+}
+typeLine(texts[0]);
+
+/* ================= ÇİÇEK TIKLAMA ================= */
+
+function flowerClick(){
+  const msg=document.createElement("div");
+  msg.className="line";
+  msg.textContent="Bu çiçek senin için 🌸";
+  document.getElementById("lineBox").appendChild(msg);
+
+  sendMail("Çiçeğe tıklandı");
+
+  for(let i=0;i<12;i++){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.textContent="💗";
+    h.style.left=Math.random()*100+"vw";
+    h.style.bottom="-20px";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),8000);
+  }
+}
+
+/* ================= ANİMASYONLAR ================= */
+
+setInterval(()=>{
+  const p=document.createElement("div");
+  p.className="petal";
+  p.textContent="🌸";
+  p.style.left=Math.random()*100+"vw";
+  p.style.bottom="-40px";
+  document.body.appendChild(p);
+  setTimeout(()=>p.remove(),12000);
+},500);
+</script>
+
+</body>
+</html>
