@@ -102,17 +102,15 @@ h1{
   background:linear-gradient(135deg,#ffd6e8,#c084fc,#ff6b9d);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-/* tulip click message */
 .line.click-msg{
   color:#fde68a;font-size:15px;
   font-style:italic;text-align:center;
 }
-/* once tulip is clicked, show a subtle already-clicked state */
 .tulip.used svg{opacity:.75;filter:saturate(.7)}
 
 @keyframes cardIn{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
 
-/* ── Tulip row — 3 tulips, phone-sized ── */
+/* ── Tulip row ── */
 #tulipRow{
   display:flex;
   align-items:flex-end;
@@ -125,32 +123,59 @@ h1{
   touch-action:manipulation;
 }
 
+/* ── LOCKED state: tulips greyed out, not clickable ── */
+#tulipRow.locked .tulip{
+  cursor:not-allowed;
+  filter:grayscale(.7) brightness(.55);
+  pointer-events:none;
+}
+
+/* ── UNLOCKED: restore cursor and add a gentle glow pulse to invite clicks ── */
+#tulipRow.unlocked .tulip{
+  cursor:pointer;
+  animation:bloomUp 1.4s cubic-bezier(.34,1.4,.64,1) both, glowPulse 2.4s ease-in-out infinite;
+}
+/* keep per-tulip bloom delays intact for unlocked */
+#tulipRow.unlocked .tulip:nth-child(1){animation-delay:.08s, .6s}
+#tulipRow.unlocked .tulip:nth-child(2){animation-delay:.22s, .8s}
+#tulipRow.unlocked .tulip:nth-child(3){animation-delay:.36s, 1s}
+
+@keyframes glowPulse{
+  0%,100%{filter:drop-shadow(0 0 0px rgba(255,120,200,0))}
+  50%     {filter:drop-shadow(0 0 10px rgba(255,120,200,.55))}
+}
+
+/* unlock banner that fades in when poem ends */
+#unlockBanner{
+  display:none;
+  margin:-10px auto 14px;
+  font-style:italic;font-size:13px;
+  color:#fde68a;
+  letter-spacing:.5px;
+  animation:fadeDown .7s ease both;
+}
+#unlockBanner.visible{display:block}
+
 .tulip{
   flex:1;
   display:flex;flex-direction:column;align-items:center;
-  cursor:pointer;
-  animation:bloomUp 1.4s cubic-bezier(.34,1.4,.64,1) both;
   will-change:transform;
   transform-origin:bottom center;
   position:relative;
-  /* big touch target */
   padding:0 2px 10px;
-  transition:filter .25s ease;
+  transition:filter .4s ease;
 }
 
-/* phone tap feedback */
 .tulip:active{
   transform:translateY(-14px) scale(1.1) rotate(var(--lean,0deg)) !important;
   filter:brightness(1.18) drop-shadow(0 8px 18px rgba(255,120,180,.5));
   z-index:20;
 }
 
-/* side tulips lean, center straight */
-.tulip:nth-child(1){--lean:-14deg;animation-delay:.08s;z-index:3}
-.tulip:nth-child(2){--lean:0deg; animation-delay:.22s;z-index:5}
-.tulip:nth-child(3){--lean:14deg; animation-delay:.36s;z-index:3}
+.tulip:nth-child(1){--lean:-14deg;z-index:3}
+.tulip:nth-child(2){--lean:0deg; z-index:5}
+.tulip:nth-child(3){--lean:14deg; z-index:3}
 
-/* heights: sides shorter, center tallest */
 .tulip:nth-child(1) svg,
 .tulip:nth-child(3) svg{width:22vw;max-width:82px;height:45vw;max-height:170px}
 .tulip:nth-child(2) svg{width:25vw;max-width:94px;height:52vw;max-height:196px}
@@ -204,6 +229,12 @@ h1{
   color:rgba(255,200,230,.36);letter-spacing:1.5px;
   animation:fadeDown 1s 4.5s both;
 }
+.hint{
+  margin-top:8px;
+  font-style:italic;font-size:13px;
+  color:rgba(255,200,230,.4);
+  letter-spacing:.5px;
+}
 </style>
 </head>
 <body>
@@ -224,8 +255,11 @@ h1{
   <div class="divider"></div>
   <div id="lineBox"></div>
 
-  <!-- 3 tulips -->
-  <div id="tulipRow">
+  <!-- unlock hint shown after poem ends -->
+  <p id="unlockBanner">🌷 Şimdi çiçeklere tıklayabilirsin!</p>
+
+  <!-- 3 tulips — start LOCKED -->
+  <div id="tulipRow" class="locked">
 
     <!-- T1: Pembe – sol -->
     <div class="tulip" id="t0" onclick="tulipClick(event,0)">
@@ -250,7 +284,7 @@ h1{
       </svg>
     </div>
 
-    <!-- T2: Sarı – merkez (en uzun) -->
+    <!-- T2: Sarı – merkez -->
     <div class="tulip" id="t1" onclick="tulipClick(event,1)">
       <svg viewBox="0 0 80 220" fill="none">
         <defs>
@@ -299,6 +333,7 @@ h1{
 
   </div><!-- end tulipRow -->
 
+  <p class="hint" id="hintText" style="opacity:0;transition:opacity .6s ease">çiçekleri tıklamayı unutma 🌷</p>
   <p class="signature">— Muzamel 🤍</p>
 </div>
 
@@ -308,7 +343,7 @@ h1{
 
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
-/* ── EmailJS — page load only ── */
+/* ── EmailJS ── */
 const PUBLIC_KEY="Ah-U6bLl0c8N9vY8z",SERVICE_ID="service_1",TEMPLATE_ID="template_1";
 (function(){emailjs.init(PUBLIC_KEY)})();
 window.addEventListener("load",()=>{
@@ -334,52 +369,67 @@ const texts=[
   {t:"İyi ki bu dünyaya geldin. İyi ki varsın. 🌷",c:"poem"},
   {t:"✨ Doğum Günün Kutlu Olsun, Meral! ✨",c:"bold-msg"},
 ];
+
+/* ── Poem done → unlock tulips ── */
+function unlockTulips(){
+  const row=document.getElementById("tulipRow");
+  row.classList.remove("locked");
+  row.classList.add("unlocked");
+  // show unlock banner
+  const banner=document.getElementById("unlockBanner");
+  banner.classList.add("visible");
+  // show hint
+  document.getElementById("hintText").style.opacity="1";
+  // hide banner after 4s
+  setTimeout(()=>{banner.style.opacity="0";banner.style.transition="opacity 1s ease"},4000);
+}
+
 let idx=0;
 function typeLine(){
-  if(idx>=texts.length)return;
+  if(idx>=texts.length){
+    unlockTulips();
+    return;
+  }
   const {t,c}=texts[idx];
   const box=document.getElementById("lineBox");
   const div=document.createElement("div");
   div.className="line "+c;
   box.appendChild(div);
   let j=0;
+  const speed=c==="greeting"?60:28;
   const iv=setInterval(()=>{
     div.textContent+=t[j++];
-    if(j===t.length){clearInterval(iv);idx++;setTimeout(typeLine,idx>=texts.length?0:700);}
-  },c==="greeting"?60:28);
+    if(j===t.length){
+      clearInterval(iv);
+      idx++;
+      setTimeout(typeLine, idx>=texts.length ? 0 : 700);
+    }
+  },speed);
 }
 typeLine();
 
-/* ── Tulip data — one message each, shown only once ── */
+/* ── Tulip data ── */
 const tulipData=[
-  {
-    id:"t0",emoji:"🌸",color:"#f472b6",
-    msg:"Bu pembe lale senin için — sevginin en nazik, en saf hali. 🌸"
-  },
-  {
-    id:"t1",emoji:"💛",color:"#fbbf24",
-    msg:"Sarı lale: Seninle her ortam güneşleniyor. Varlığın etrafına ışık saçıyor — tam senin gibi. 🌟"
-  },
-  {
-    id:"t2",emoji:"❤️",color:"#ef4444",
-    msg:"Kırmızı lale: En derin ve en samimi dileklerimle. Yüreğindeki iyilik dünyayı daha sıcak yapıyor. ❤️"
-  },
+  {id:"t0",emoji:"🌸",color:"#f472b6",
+    msg:"Bu pembe lale senin için — nezaketini ve içindeki o saf güzelliği hatırlatsın. 🌸"},
+  {id:"t1",emoji:"💛",color:"#fbbf24",
+    msg:"Sarı lale — girdiğin her ortama sıcaklık ve ışık katıyorsun. 🌟"},
+  {id:"t2",emoji:"❤️",color:"#ef4444",
+    msg:"Kırmızı lale — kalbindeki iyilik ve samimiyet hep böyle kalsın. ❤️"},
 ];
 
-/* track which tulips have been clicked */
 const clicked=new Set();
 
 function tulipClick(e,i){
-  /* if already clicked, do nothing */
+  /* guard: only works after unlock */
+  const row=document.getElementById("tulipRow");
+  if(row.classList.contains("locked")) return;
   if(clicked.has(i)) return;
   clicked.add(i);
 
   const d=tulipData[i];
-
-  /* mark tulip as used visually */
   document.getElementById(d.id).classList.add("used");
 
-  /* show message card — only once */
   const box=document.getElementById("lineBox");
   const el=document.createElement("div");
   el.className="line click-msg";
@@ -387,11 +437,9 @@ function tulipClick(e,i){
   box.appendChild(el);
   el.scrollIntoView({behavior:"smooth",block:"nearest"});
 
-  /* get touch or click position */
   const cx=(e.changedTouches?.[0]||e).clientX;
   const cy=(e.changedTouches?.[0]||e).clientY;
 
-  /* hearts */
   for(let k=0;k<10;k++){
     const h=document.createElement("div");
     h.className="heart";
@@ -401,7 +449,6 @@ function tulipClick(e,i){
     setTimeout(()=>h.remove(),6000);
   }
 
-  /* sparkles */
   const cols=["#ff69b4",d.color,"#ffd700","#fff","#c084fc"];
   for(let k=0;k<16;k++){
     const sp=document.createElement("div");
