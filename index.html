@@ -2,189 +2,430 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>İyi Ki Doğdun Meral</title>
-
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
 body{
-  margin:0;
-  height:100vh;
-  background:radial-gradient(circle at top,#ffd6e8,#b983ff);
-  font-family:'Georgia',serif;
-  overflow:hidden;
+  min-height:100dvh;
+  background:#080010;
+  font-family:'Cormorant Garamond',serif;
+  overflow-x:hidden;
   color:#fff;
   text-align:center;
+  overscroll-behavior:none;
 }
 
+/* ── Stars ── */
+#stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+.star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d) ease-in-out infinite alternate}
+@keyframes twinkle{from{opacity:.06}to{opacity:.9}}
+
+/* ── Orbs ── */
+.orb{position:fixed;border-radius:50%;filter:blur(80px);opacity:.22;pointer-events:none;z-index:0;animation:drift 14s ease-in-out infinite alternate}
+.orb1{width:320px;height:320px;background:radial-gradient(#a855f7,transparent);top:-80px;left:-80px}
+.orb2{width:260px;height:260px;background:radial-gradient(#ec4899,transparent);bottom:-70px;right:-70px;animation-delay:-7s}
+.orb3{width:200px;height:200px;background:radial-gradient(#f59e0b,transparent);top:40%;left:48%;animation-delay:-3.5s}
+@keyframes drift{from{transform:translate(0,0)}to{transform:translate(36px,26px)}}
+
+/* ── Layout ── */
+#app{
+  position:relative;z-index:1;
+  min-height:100dvh;
+  display:flex;flex-direction:column;align-items:center;
+  padding:28px 16px 60px;
+}
+
+/* ── Header ── */
+.subtitle{
+  font-style:italic;font-size:11px;
+  letter-spacing:5px;color:#c084fc;
+  text-transform:uppercase;opacity:.7;
+  animation:fadeDown .8s ease both;
+}
 h1{
-  margin-top:20px;
-  font-size:28px;
+  font-family:'Playfair Display',serif;
+  font-size:clamp(44px,14vw,72px);
+  font-weight:700;
+  background:linear-gradient(135deg,#ffd6e8 0%,#c084fc 35%,#ff6b9d 65%,#ffd700 100%);
+  background-size:300% 300%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:shimmer 5s ease infinite, fadeDown .8s .2s both;
+  line-height:1.05;margin:8px 0 6px;
+}
+@keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:none}}
+
+.date-badge{
+  display:inline-block;
+  border:1px solid rgba(255,255,255,.15);
+  padding:4px 18px;border-radius:40px;
+  font-size:11px;letter-spacing:3px;
+  color:rgba(255,255,255,.4);
+  background:rgba(255,255,255,.04);
+  animation:fadeDown .8s .4s both;
+}
+.divider{
+  width:80px;height:1px;
+  background:linear-gradient(to right,transparent,#ff6b9d,transparent);
+  margin:16px auto;
+  animation:fadeDown .8s .55s both;
 }
 
+/* ── Message cards ── */
 #lineBox{
-  width:90%;
+  width:calc(100vw - 32px);
   max-width:420px;
-  margin:20px auto;
+  margin:0 auto 22px;
 }
-
 .line{
-  background:rgba(255,255,255,.9);
-  color:#5a2a5a;
-  margin:14px 0;
-  padding:16px;
-  border-radius:18px;
+  background:rgba(255,255,255,.055);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.09);
+  color:#fde8ff;
+  margin:8px 0;
+  padding:14px 18px;
+  border-radius:16px;
   font-size:16px;
-  animation:fadeIn .8s ease forwards;
+  line-height:1.65;
+  animation:cardIn .7s cubic-bezier(.34,1.5,.64,1) both;
+  text-align:left;
+}
+.line.greeting{font-style:italic;color:#d8b4fe;font-size:13px;letter-spacing:1px;text-align:center}
+.line.poem{font-style:italic;color:#fce7ff;font-size:15.5px}
+.line.bold-msg{
+  font-family:'Playfair Display',serif;
+  font-size:18px;font-weight:700;text-align:center;
+  background:linear-gradient(135deg,#ffd6e8,#c084fc,#ff6b9d);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+/* tulip click message */
+.line.click-msg{
+  color:#fde68a;font-size:15px;
+  font-style:italic;text-align:center;
+}
+/* once tulip is clicked, show a subtle already-clicked state */
+.tulip.used svg{opacity:.75;filter:saturate(.7)}
+
+@keyframes cardIn{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
+
+/* ── Tulip row — 3 tulips, phone-sized ── */
+#tulipRow{
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  gap:4px;
+  width:76vw;
+  max-width:280px;
+  margin:4px auto 22px;
+  position:relative;
+  touch-action:manipulation;
 }
 
-@keyframes fadeIn{
-  from{opacity:0;transform:translateY(10px)}
-  to{opacity:1}
-}
-
-#flower{
-  position:absolute;
-  bottom:10px;
-  left:50%;
-  transform:translateX(-50%) scale(0);
-  font-size:120px;
-  animation:grow 3s ease forwards;
+.tulip{
+  flex:1;
+  display:flex;flex-direction:column;align-items:center;
   cursor:pointer;
+  animation:bloomUp 1.4s cubic-bezier(.34,1.4,.64,1) both;
+  will-change:transform;
+  transform-origin:bottom center;
+  position:relative;
+  /* big touch target */
+  padding:0 2px 10px;
+  transition:filter .25s ease;
 }
 
-@keyframes grow{
-  0%{transform:translateX(-50%) scale(0)}
-  60%{transform:translateX(-50%) scale(1.2)}
-  100%{transform:translateX(-50%) scale(1)}
+/* phone tap feedback */
+.tulip:active{
+  transform:translateY(-14px) scale(1.1) rotate(var(--lean,0deg)) !important;
+  filter:brightness(1.18) drop-shadow(0 8px 18px rgba(255,120,180,.5));
+  z-index:20;
 }
 
+/* side tulips lean, center straight */
+.tulip:nth-child(1){--lean:-14deg;animation-delay:.08s;z-index:3}
+.tulip:nth-child(2){--lean:0deg; animation-delay:.22s;z-index:5}
+.tulip:nth-child(3){--lean:14deg; animation-delay:.36s;z-index:3}
+
+/* heights: sides shorter, center tallest */
+.tulip:nth-child(1) svg,
+.tulip:nth-child(3) svg{width:22vw;max-width:82px;height:45vw;max-height:170px}
+.tulip:nth-child(2) svg{width:25vw;max-width:94px;height:52vw;max-height:196px}
+.tulip svg{display:block}
+
+@keyframes bloomUp{
+  0%  {opacity:0;transform:translateY(60px) scale(.2) rotate(var(--lean,0deg))}
+  65% {transform:translateY(-6px) scale(1.05) rotate(var(--lean,0deg))}
+  100%{opacity:1;transform:translateY(0) scale(1) rotate(var(--lean,0deg))}
+}
+
+/* ── Floating petals ── */
 .petal{
-  position:absolute;
-  font-size:28px;
-  animation:float 10s linear infinite;
+  position:fixed;pointer-events:none;
+  animation:floatUp var(--t) linear forwards;
+  font-size:var(--s);
+  will-change:transform,opacity;
+}
+@keyframes floatUp{
+  0%  {transform:translateY(108vh) rotate(0deg);opacity:.85}
+  100%{transform:translateY(-12vh) rotate(500deg);opacity:0}
 }
 
-@keyframes float{
-  to{transform:translateY(-120vh) rotate(360deg)}
-}
-
+/* ── Hearts ── */
 .heart{
-  position:absolute;
-  font-size:20px;
-  animation:rise 8s linear infinite;
+  position:fixed;pointer-events:none;
+  animation:riseHeart 5.5s ease-out forwards;
+  will-change:transform,opacity;
+}
+@keyframes riseHeart{
+  0%  {opacity:1;transform:translateY(0) scale(1)}
+  100%{opacity:0;transform:translateY(-75vh) scale(.2)}
 }
 
-@keyframes rise{
-  to{transform:translateY(-120vh);opacity:0}
+/* ── Sparkles ── */
+.sparkle{
+  position:fixed;pointer-events:none;border-radius:50%;
+  animation:sparkOut .75s ease forwards;
+  will-change:transform,opacity;
+}
+@keyframes sparkOut{
+  0%  {opacity:1;transform:scale(1.3) translate(0,0)}
+  100%{opacity:0;transform:scale(0) translate(var(--tx),var(--ty))}
+}
+
+/* ── Signature ── */
+.signature{
+  margin-top:18px;
+  font-family:'Playfair Display',serif;
+  font-style:italic;font-size:17px;
+  color:rgba(255,200,230,.36);letter-spacing:1.5px;
+  animation:fadeDown 1s 4.5s both;
 }
 </style>
 </head>
-
 <body>
 
-<h1>🌸 İyi Ki Doğdun Meral 🌸</h1>
-<div id="lineBox"></div>
-<div id="flower" onclick="flowerClick()">🌷</div>
+<div id="stars"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<div id="app">
+
+  <div class="header">
+    <p class="subtitle">✦ &nbsp; Sana Özel Bir Gün &nbsp; ✦</p>
+    <h1>Meral</h1>
+    <span class="date-badge">2026</span>
+  </div>
+
+  <div class="divider"></div>
+  <div id="lineBox"></div>
+
+  <!-- 3 tulips -->
+  <div id="tulipRow">
+
+    <!-- T1: Pembe – sol -->
+    <div class="tulip" id="t0" onclick="tulipClick(event,0)">
+      <svg viewBox="0 0 72 200" fill="none">
+        <defs>
+          <radialGradient id="rg1" cx="36%" cy="26%" r="64%">
+            <stop offset="0%" stop-color="#ffd4ee"/>
+            <stop offset="52%" stop-color="#f0369e"/>
+            <stop offset="100%" stop-color="#880044"/>
+          </radialGradient>
+        </defs>
+        <path d="M36 200 Q34 162 33 136 Q32 110 35 86" stroke="#2e9e2e" stroke-width="5.5" stroke-linecap="round"/>
+        <path d="M34 154 Q16 136 12 114 Q27 125 34 146Z" fill="#3dbb3d"/>
+        <path d="M34 134 Q51 116 55 96 Q40 108 34 128Z" fill="#2e9e2e"/>
+        <ellipse cx="36" cy="60" rx="20" ry="48" fill="#880044" opacity=".5"/>
+        <ellipse cx="14" cy="72" rx="16" ry="42" fill="#9e0050" opacity=".6" transform="rotate(-24 14 72)"/>
+        <ellipse cx="58" cy="72" rx="16" ry="42" fill="#9e0050" opacity=".6" transform="rotate(24 58 72)"/>
+        <ellipse cx="20" cy="56" rx="18" ry="47" fill="url(#rg1)" transform="rotate(-13 20 56)"/>
+        <ellipse cx="52" cy="56" rx="18" ry="47" fill="url(#rg1)" transform="rotate(13 52 56)"/>
+        <ellipse cx="36" cy="44" rx="21" ry="51" fill="url(#rg1)"/>
+        <ellipse cx="27" cy="24" rx="6.5" ry="15" fill="rgba(255,255,255,.4)" transform="rotate(-10 27 24)"/>
+      </svg>
+    </div>
+
+    <!-- T2: Sarı – merkez (en uzun) -->
+    <div class="tulip" id="t1" onclick="tulipClick(event,1)">
+      <svg viewBox="0 0 80 220" fill="none">
+        <defs>
+          <radialGradient id="rg2" cx="36%" cy="26%" r="64%">
+            <stop offset="0%" stop-color="#fff9b0"/>
+            <stop offset="52%" stop-color="#f0a000"/>
+            <stop offset="100%" stop-color="#7a4000"/>
+          </radialGradient>
+        </defs>
+        <path d="M40 220 Q40 178 40 150 Q40 120 40 86" stroke="#267026" stroke-width="6.5" stroke-linecap="round"/>
+        <path d="M40 172 Q20 152 16 128 Q33 142 40 164Z" fill="#3dbb3d"/>
+        <path d="M40 150 Q60 130 64 108 Q47 122 40 144Z" fill="#267026"/>
+        <ellipse cx="40" cy="62" rx="22" ry="53" fill="#7a4000" opacity=".5"/>
+        <ellipse cx="15" cy="76" rx="18" ry="46" fill="#8e4800" opacity=".6" transform="rotate(-24 15 76)"/>
+        <ellipse cx="65" cy="76" rx="18" ry="46" fill="#8e4800" opacity=".6" transform="rotate(24 65 76)"/>
+        <ellipse cx="22" cy="60" rx="20" ry="51" fill="url(#rg2)" transform="rotate(-13 22 60)"/>
+        <ellipse cx="58" cy="60" rx="20" ry="51" fill="url(#rg2)" transform="rotate(13 58 60)"/>
+        <ellipse cx="40" cy="47" rx="23" ry="55" fill="url(#rg2)"/>
+        <ellipse cx="40" cy="45" rx="11" ry="24" fill="rgba(160,80,0,.28)"/>
+        <ellipse cx="31" cy="25" rx="7" ry="17" fill="rgba(255,255,255,.44)" transform="rotate(-10 31 25)"/>
+      </svg>
+    </div>
+
+    <!-- T3: Kırmızı – sağ -->
+    <div class="tulip" id="t2" onclick="tulipClick(event,2)">
+      <svg viewBox="0 0 72 200" fill="none">
+        <defs>
+          <radialGradient id="rg3" cx="36%" cy="26%" r="64%">
+            <stop offset="0%" stop-color="#ff9a88"/>
+            <stop offset="52%" stop-color="#d80e0e"/>
+            <stop offset="100%" stop-color="#5e0000"/>
+          </radialGradient>
+        </defs>
+        <path d="M36 200 Q38 162 39 136 Q40 110 37 86" stroke="#2e9e2e" stroke-width="5.5" stroke-linecap="round"/>
+        <path d="M38 152 Q56 134 60 112 Q45 124 38 146Z" fill="#3dbb3d"/>
+        <path d="M38 134 Q21 116 17 94 Q32 107 38 128Z" fill="#2e9e2e"/>
+        <ellipse cx="36" cy="60" rx="20" ry="48" fill="#5e0000" opacity=".5"/>
+        <ellipse cx="14" cy="72" rx="16" ry="42" fill="#6c0000" opacity=".6" transform="rotate(-24 14 72)"/>
+        <ellipse cx="58" cy="72" rx="16" ry="42" fill="#6c0000" opacity=".6" transform="rotate(24 58 72)"/>
+        <ellipse cx="20" cy="56" rx="18" ry="47" fill="url(#rg3)" transform="rotate(-13 20 56)"/>
+        <ellipse cx="52" cy="56" rx="18" ry="47" fill="url(#rg3)" transform="rotate(13 52 56)"/>
+        <ellipse cx="36" cy="44" rx="21" ry="51" fill="url(#rg3)"/>
+        <ellipse cx="27" cy="24" rx="6.5" ry="15" fill="rgba(255,255,255,.34)" transform="rotate(-10 27 24)"/>
+      </svg>
+    </div>
+
+  </div><!-- end tulipRow -->
+
+  <p class="signature">— Muzamel 🤍</p>
+</div>
 
 <audio autoplay loop>
-<source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Keys_of_Moon/Emotional/Keys_of_Moon_-_Tenderness.mp3">
+  <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Keys_of_Moon/Emotional/Keys_of_Moon_-_Tenderness.mp3">
 </audio>
 
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-
 <script>
-/* ================= EMAILJS ================= */
-
-// BURALARI DOLDUR
-const PUBLIC_KEY = "Ah-U6bLl0c8N9vY8z";
-const SERVICE_ID = "service_1";
-const TEMPLATE_ID = "template_1";
-
-(function(){
-  emailjs.init(PUBLIC_KEY);
-})();
-
-function sendMail(action){
-  emailjs.send(SERVICE_ID, TEMPLATE_ID, {
-    action: action,
-    message: "Meral doğum günü sitesi etkileşimi",
-    time: new Date().toLocaleString(),
-    from_name: "Muzamel"
-  }).then(
-    res => console.log("Mail gönderildi", res.status),
-    err => console.error("Mail hatası", err)
-  );
-}
-
-// Sayfa açılınca mail
-window.addEventListener("load", ()=>{
-  sendMail("Sayfa açıldı");
+/* ── EmailJS — page load only ── */
+const PUBLIC_KEY="Ah-U6bLl0c8N9vY8z",SERVICE_ID="service_1",TEMPLATE_ID="template_1";
+(function(){emailjs.init(PUBLIC_KEY)})();
+window.addEventListener("load",()=>{
+  emailjs.send(SERVICE_ID,TEMPLATE_ID,{action:"Sayfa açıldı",message:"Meral doğum günü",time:new Date().toLocaleString(),from_name:"Muzamel"})
+  .then(r=>console.log("✉️",r.status),e=>console.error(e));
 });
 
-/* ================= METİNLER ================= */
+/* ── Stars ── */
+const starsEl=document.getElementById("stars");
+for(let i=0;i<80;i++){
+  const s=document.createElement("div");s.className="star";
+  const sz=Math.random()*2.4+.3;
+  s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${1.5+Math.random()*5}s;animation-delay:${Math.random()*6}s`;
+  starsEl.appendChild(s);
+}
 
+/* ── Texts ── */
 const texts=[
-  "Sevgili Meral,",
-  "Bu dünya seni tanıdığı için biraz daha güzel.",
-  "Gülüşün, zamana bile iyi geliyor.",
-  "İyi ki varsın.",
-  "Doğum günün kutlu olsun! 🎉",
-  
+  {t:"Sevgili Meral,",c:"greeting"},
+  {t:"Bazı insanlar vardır — geldiklerinde oda aydınlanır, güldüklerinde zaman durur. Sen öyle birisin.",c:"poem"},
+  {t:"Her doğum günün, yeni bir baharın habercisi olsun; hayatın hep en güzel çiçeklerle dolsun.",c:"poem"},
+  {t:"Geçen her yıl seni daha da değerli kılıyor. Bu dünya seninle daha renkli, daha güzel.",c:"poem"},
+  {t:"İyi ki bu dünyaya geldin. İyi ki varsın. 🌷",c:"poem"},
+  {t:"✨ Doğum Günün Kutlu Olsun, Meral! ✨",c:"bold-msg"},
 ];
-
-let i=0;
-function typeLine(text){
+let idx=0;
+function typeLine(){
+  if(idx>=texts.length)return;
+  const {t,c}=texts[idx];
   const box=document.getElementById("lineBox");
   const div=document.createElement("div");
-  div.className="line";
+  div.className="line "+c;
   box.appendChild(div);
-
   let j=0;
-  const int=setInterval(()=>{
-    div.textContent+=text[j++];
-    if(j===text.length){
-      clearInterval(int);
-      if(++i<texts.length)
-        setTimeout(()=>typeLine(texts[i]),600);
-    }
-  },45);
+  const iv=setInterval(()=>{
+    div.textContent+=t[j++];
+    if(j===t.length){clearInterval(iv);idx++;setTimeout(typeLine,idx>=texts.length?0:700);}
+  },c==="greeting"?60:28);
 }
-typeLine(texts[0]);
+typeLine();
 
-/* ================= ÇİÇEK TIKLAMA ================= */
+/* ── Tulip data — one message each, shown only once ── */
+const tulipData=[
+  {
+    id:"t0",emoji:"🌸",color:"#f472b6",
+    msg:"Bu pembe lale senin için — sevginin en nazik, en saf hali. 🌸"
+  },
+  {
+    id:"t1",emoji:"💛",color:"#fbbf24",
+    msg:"Sarı lale: Seninle her ortam güneşleniyor. Varlığın etrafına ışık saçıyor — tam senin gibi. 🌟"
+  },
+  {
+    id:"t2",emoji:"❤️",color:"#ef4444",
+    msg:"Kırmızı lale: En derin ve en samimi dileklerimle. Yüreğindeki iyilik dünyayı daha sıcak yapıyor. ❤️"
+  },
+];
 
-function flowerClick(){
-  const msg=document.createElement("div");
-  msg.className="line";
-  msg.textContent="Bu çiçek senin için 🌸";
-  document.getElementById("lineBox").appendChild(msg);
+/* track which tulips have been clicked */
+const clicked=new Set();
 
-  sendMail("Çiçeğe tıklandı");
+function tulipClick(e,i){
+  /* if already clicked, do nothing */
+  if(clicked.has(i)) return;
+  clicked.add(i);
 
-  for(let i=0;i<12;i++){
+  const d=tulipData[i];
+
+  /* mark tulip as used visually */
+  document.getElementById(d.id).classList.add("used");
+
+  /* show message card — only once */
+  const box=document.getElementById("lineBox");
+  const el=document.createElement("div");
+  el.className="line click-msg";
+  el.textContent=d.emoji+" "+d.msg;
+  box.appendChild(el);
+  el.scrollIntoView({behavior:"smooth",block:"nearest"});
+
+  /* get touch or click position */
+  const cx=(e.changedTouches?.[0]||e).clientX;
+  const cy=(e.changedTouches?.[0]||e).clientY;
+
+  /* hearts */
+  for(let k=0;k<10;k++){
     const h=document.createElement("div");
     h.className="heart";
-    h.textContent="💗";
-    h.style.left=Math.random()*100+"vw";
-    h.style.bottom="-20px";
+    h.textContent=d.emoji;
+    h.style.cssText=`left:${10+Math.random()*80}vw;bottom:${Math.random()*18+6}px;font-size:${14+Math.random()*12}px`;
     document.body.appendChild(h);
-    setTimeout(()=>h.remove(),8000);
+    setTimeout(()=>h.remove(),6000);
+  }
+
+  /* sparkles */
+  const cols=["#ff69b4",d.color,"#ffd700","#fff","#c084fc"];
+  for(let k=0;k<16;k++){
+    const sp=document.createElement("div");
+    sp.className="sparkle";
+    const ang=Math.random()*360,dist=30+Math.random()*60,sz=4+Math.random()*6;
+    sp.style.cssText=`left:${cx}px;top:${cy}px;width:${sz}px;height:${sz}px;`+
+      `background:${cols[k%cols.length]};`+
+      `--tx:${Math.cos(ang*Math.PI/180)*dist}px;`+
+      `--ty:${Math.sin(ang*Math.PI/180)*dist}px`;
+    document.body.appendChild(sp);
+    setTimeout(()=>sp.remove(),800);
   }
 }
 
-/* ================= ANİMASYONLAR ================= */
-
+/* ── Petals ── */
+const petalSet=["🌸","🌺","🌷","✨","💫","🌼"];
 setInterval(()=>{
   const p=document.createElement("div");
   p.className="petal";
-  p.textContent="🌸";
-  p.style.left=Math.random()*100+"vw";
-  p.style.bottom="-40px";
+  p.textContent=petalSet[Math.floor(Math.random()*petalSet.length)];
+  p.style.cssText=`left:${Math.random()*100}vw;bottom:-40px;--t:${10+Math.random()*9}s;--s:${12+Math.random()*14}px`;
   document.body.appendChild(p);
-  setTimeout(()=>p.remove(),12000);
-},500);
+  setTimeout(()=>p.remove(),19000);
+},900);
 </script>
-
 </body>
 </html>
