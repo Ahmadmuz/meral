@@ -7,258 +7,72 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-
-body{
-  min-height:100dvh;
-  background:#080010;
-  font-family:'Cormorant Garamond',serif;
-  overflow-x:hidden;
-  color:#fff;
-  text-align:center;
-  overscroll-behavior:none;
-}
-
-/* ── Stars ── */
+body{min-height:100dvh;background:#080010;font-family:'Cormorant Garamond',serif;overflow-x:hidden;color:#fff;text-align:center;overscroll-behavior:none;}
 #stars{position:fixed;inset:0;pointer-events:none;z-index:0}
 .star{position:absolute;border-radius:50%;background:#fff;animation:twinkle var(--d) ease-in-out infinite alternate}
 @keyframes twinkle{from{opacity:.06}to{opacity:.9}}
-
-/* ── Orbs ── */
 .orb{position:fixed;border-radius:50%;filter:blur(80px);opacity:.22;pointer-events:none;z-index:0;animation:drift 14s ease-in-out infinite alternate}
 .orb1{width:320px;height:320px;background:radial-gradient(#a855f7,transparent);top:-80px;left:-80px}
 .orb2{width:260px;height:260px;background:radial-gradient(#ec4899,transparent);bottom:-70px;right:-70px;animation-delay:-7s}
 .orb3{width:200px;height:200px;background:radial-gradient(#f59e0b,transparent);top:40%;left:48%;animation-delay:-3.5s}
 @keyframes drift{from{transform:translate(0,0)}to{transform:translate(36px,26px)}}
-
-/* ── Layout ── */
-#app{
-  position:relative;z-index:1;
-  min-height:100dvh;
-  display:flex;flex-direction:column;align-items:center;
-  padding:28px 16px 60px;
-}
-
-/* ── Header ── */
-.subtitle{
-  font-style:italic;font-size:11px;
-  letter-spacing:5px;color:#c084fc;
-  text-transform:uppercase;opacity:.7;
-  animation:fadeDown .8s ease both;
-}
-h1{
-  font-family:'Playfair Display',serif;
-  font-size:clamp(44px,14vw,72px);
-  font-weight:700;
-  background:linear-gradient(135deg,#ffd6e8 0%,#c084fc 35%,#ff6b9d 65%,#ffd700 100%);
-  background-size:300% 300%;
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  animation:shimmer 5s ease infinite, fadeDown .8s .2s both;
-  line-height:1.05;margin:8px 0 6px;
-}
+#app{position:relative;z-index:1;min-height:100dvh;display:flex;flex-direction:column;align-items:center;padding:28px 16px 60px;}
+.subtitle{font-style:italic;font-size:11px;letter-spacing:5px;color:#c084fc;text-transform:uppercase;opacity:.7;animation:fadeDown .8s ease both;}
+h1{font-family:'Playfair Display',serif;font-size:clamp(44px,14vw,72px);font-weight:700;background:linear-gradient(135deg,#ffd6e8 0%,#c084fc 35%,#ff6b9d 65%,#ffd700 100%);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 5s ease infinite, fadeDown .8s .2s both;line-height:1.05;margin:8px 0 6px;}
 @keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
 @keyframes fadeDown{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:none}}
-
-.date-badge{
-  display:inline-block;
-  border:1px solid rgba(255,255,255,.15);
-  padding:4px 18px;border-radius:40px;
-  font-size:11px;letter-spacing:3px;
-  color:rgba(255,255,255,.4);
-  background:rgba(255,255,255,.04);
-  animation:fadeDown .8s .4s both;
-}
-.divider{
-  width:80px;height:1px;
-  background:linear-gradient(to right,transparent,#ff6b9d,transparent);
-  margin:16px auto;
-  animation:fadeDown .8s .55s both;
-}
-
-/* ── Message cards ── */
-#lineBox{
-  width:calc(100vw - 32px);
-  max-width:420px;
-  margin:0 auto 22px;
-}
-.line{
-  background:rgba(255,255,255,.055);
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
-  border:1px solid rgba(255,255,255,.09);
-  color:#fde8ff;
-  margin:8px 0;
-  padding:14px 18px;
-  border-radius:16px;
-  font-size:16px;
-  line-height:1.65;
-  animation:cardIn .7s cubic-bezier(.34,1.5,.64,1) both;
-  text-align:left;
-}
+.date-badge{display:inline-block;border:1px solid rgba(255,255,255,.15);padding:4px 18px;border-radius:40px;font-size:11px;letter-spacing:3px;color:rgba(255,255,255,.4);background:rgba(255,255,255,.04);animation:fadeDown .8s .4s both;}
+.divider{width:80px;height:1px;background:linear-gradient(to right,transparent,#ff6b9d,transparent);margin:16px auto;animation:fadeDown .8s .55s both;}
+#lineBox{width:calc(100vw - 32px);max-width:420px;margin:0 auto 22px;}
+.line{background:rgba(255,255,255,.055);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.09);color:#fde8ff;margin:8px 0;padding:14px 18px;border-radius:16px;font-size:16px;line-height:1.65;animation:cardIn .7s cubic-bezier(.34,1.5,.64,1) both;text-align:left;}
 .line.greeting{font-style:italic;color:#d8b4fe;font-size:13px;letter-spacing:1px;text-align:center}
 .line.poem{font-style:italic;color:#fce7ff;font-size:15.5px}
-.line.bold-msg{
-  font-family:'Playfair Display',serif;
-  font-size:18px;font-weight:700;text-align:center;
-  background:linear-gradient(135deg,#ffd6e8,#c084fc,#ff6b9d);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.line.click-msg{
-  color:#fde68a;font-size:15px;
-  font-style:italic;text-align:center;
-}
+.line.bold-msg{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;text-align:center;background:linear-gradient(135deg,#ffd6e8,#c084fc,#ff6b9d);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.line.click-msg{color:#fde68a;font-size:15px;font-style:italic;text-align:center;}
 .tulip.used svg{opacity:.75;filter:saturate(.7)}
-
 @keyframes cardIn{from{opacity:0;transform:translateY(12px) scale(.97)}to{opacity:1;transform:none}}
-
-/* ── Tulip row ── */
-#tulipRow{
-  display:flex;
-  align-items:flex-end;
-  justify-content:center;
-  gap:4px;
-  width:76vw;
-  max-width:280px;
-  margin:4px auto 22px;
-  position:relative;
-  touch-action:manipulation;
-}
-
-/* ── LOCKED state: tulips greyed out, not clickable ── */
-#tulipRow.locked .tulip{
-  cursor:not-allowed;
-  filter:grayscale(.7) brightness(.55);
-  pointer-events:none;
-}
-
-/* ── UNLOCKED: restore cursor and add a gentle glow pulse to invite clicks ── */
-#tulipRow.unlocked .tulip{
-  cursor:pointer;
-  animation:bloomUp 1.4s cubic-bezier(.34,1.4,.64,1) both, glowPulse 2.4s ease-in-out infinite;
-}
-/* keep per-tulip bloom delays intact for unlocked */
+#tulipRow{display:flex;align-items:flex-end;justify-content:center;gap:4px;width:76vw;max-width:280px;margin:4px auto 22px;position:relative;touch-action:manipulation;}
+#tulipRow.locked .tulip{cursor:not-allowed;filter:grayscale(.7) brightness(.55);pointer-events:none;}
+#tulipRow.unlocked .tulip{cursor:pointer;animation:bloomUp 1.4s cubic-bezier(.34,1.4,.64,1) both, glowPulse 2.4s ease-in-out infinite;}
 #tulipRow.unlocked .tulip:nth-child(1){animation-delay:.08s, .6s}
 #tulipRow.unlocked .tulip:nth-child(2){animation-delay:.22s, .8s}
 #tulipRow.unlocked .tulip:nth-child(3){animation-delay:.36s, 1s}
-
-@keyframes glowPulse{
-  0%,100%{filter:drop-shadow(0 0 0px rgba(255,120,200,0))}
-  50%     {filter:drop-shadow(0 0 10px rgba(255,120,200,.55))}
-}
-
-/* unlock banner that fades in when poem ends */
-#unlockBanner{
-  display:none;
-  margin:-10px auto 14px;
-  font-style:italic;font-size:13px;
-  color:#fde68a;
-  letter-spacing:.5px;
-  animation:fadeDown .7s ease both;
-}
+@keyframes glowPulse{0%,100%{filter:drop-shadow(0 0 0px rgba(255,120,200,0))}50%{filter:drop-shadow(0 0 10px rgba(255,120,200,.55))}}
+#unlockBanner{display:none;margin:-10px auto 14px;font-style:italic;font-size:13px;color:#fde68a;letter-spacing:.5px;animation:fadeDown .7s ease both;}
 #unlockBanner.visible{display:block}
-
-.tulip{
-  flex:1;
-  display:flex;flex-direction:column;align-items:center;
-  will-change:transform;
-  transform-origin:bottom center;
-  position:relative;
-  padding:0 2px 10px;
-  transition:filter .4s ease;
-}
-
-.tulip:active{
-  transform:translateY(-14px) scale(1.1) rotate(var(--lean,0deg)) !important;
-  filter:brightness(1.18) drop-shadow(0 8px 18px rgba(255,120,180,.5));
-  z-index:20;
-}
-
+.tulip{flex:1;display:flex;flex-direction:column;align-items:center;will-change:transform;transform-origin:bottom center;position:relative;padding:0 2px 10px;transition:filter .4s ease;}
+.tulip:active{transform:translateY(-14px) scale(1.1) rotate(var(--lean,0deg)) !important;filter:brightness(1.18) drop-shadow(0 8px 18px rgba(255,120,180,.5));z-index:20;}
 .tulip:nth-child(1){--lean:-14deg;z-index:3}
 .tulip:nth-child(2){--lean:0deg; z-index:5}
 .tulip:nth-child(3){--lean:14deg; z-index:3}
-
-.tulip:nth-child(1) svg,
-.tulip:nth-child(3) svg{width:22vw;max-width:82px;height:45vw;max-height:170px}
+.tulip:nth-child(1) svg,.tulip:nth-child(3) svg{width:22vw;max-width:82px;height:45vw;max-height:170px}
 .tulip:nth-child(2) svg{width:25vw;max-width:94px;height:52vw;max-height:196px}
 .tulip svg{display:block}
-
-@keyframes bloomUp{
-  0%  {opacity:0;transform:translateY(60px) scale(.2) rotate(var(--lean,0deg))}
-  65% {transform:translateY(-6px) scale(1.05) rotate(var(--lean,0deg))}
-  100%{opacity:1;transform:translateY(0) scale(1) rotate(var(--lean,0deg))}
-}
-
-/* ── Floating petals ── */
-.petal{
-  position:fixed;pointer-events:none;
-  animation:floatUp var(--t) linear forwards;
-  font-size:var(--s);
-  will-change:transform,opacity;
-}
-@keyframes floatUp{
-  0%  {transform:translateY(108vh) rotate(0deg);opacity:.85}
-  100%{transform:translateY(-12vh) rotate(500deg);opacity:0}
-}
-
-/* ── Hearts ── */
-.heart{
-  position:fixed;pointer-events:none;
-  animation:riseHeart 5.5s ease-out forwards;
-  will-change:transform,opacity;
-}
-@keyframes riseHeart{
-  0%  {opacity:1;transform:translateY(0) scale(1)}
-  100%{opacity:0;transform:translateY(-75vh) scale(.2)}
-}
-
-/* ── Sparkles ── */
-.sparkle{
-  position:fixed;pointer-events:none;border-radius:50%;
-  animation:sparkOut .75s ease forwards;
-  will-change:transform,opacity;
-}
-@keyframes sparkOut{
-  0%  {opacity:1;transform:scale(1.3) translate(0,0)}
-  100%{opacity:0;transform:scale(0) translate(var(--tx),var(--ty))}
-}
-
-/* ── Signature ── */
-.signature{
-  margin-top:18px;
-  font-family:'Playfair Display',serif;
-  font-style:italic;font-size:17px;
-  color:rgba(255,200,230,.36);letter-spacing:1.5px;
-  animation:fadeDown 1s 4.5s both;
-}
-.hint{
-  margin-top:8px;
-  font-style:italic;font-size:13px;
-  color:rgba(255,200,230,.4);
-  letter-spacing:.5px;
-}
+@keyframes bloomUp{0%{opacity:0;transform:translateY(60px) scale(.2) rotate(var(--lean,0deg))}65%{transform:translateY(-6px) scale(1.05) rotate(var(--lean,0deg))}100%{opacity:1;transform:translateY(0) scale(1) rotate(var(--lean,0deg))}}
+.petal{position:fixed;pointer-events:none;animation:floatUp var(--t) linear forwards;font-size:var(--s);will-change:transform,opacity;}
+@keyframes floatUp{0%{transform:translateY(108vh) rotate(0deg);opacity:.85}100%{transform:translateY(-12vh) rotate(500deg);opacity:0}}
+.heart{position:fixed;pointer-events:none;animation:riseHeart 5.5s ease-out forwards;will-change:transform,opacity;}
+@keyframes riseHeart{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-75vh) scale(.2)}}
+.sparkle{position:fixed;pointer-events:none;border-radius:50%;animation:sparkOut .75s ease forwards;will-change:transform,opacity;}
+@keyframes sparkOut{0%{opacity:1;transform:scale(1.3) translate(0,0)}100%{opacity:0;transform:scale(0) translate(var(--tx),var(--ty))}}
+.signature{margin-top:18px;font-family:'Playfair Display',serif;font-style:italic;font-size:17px;color:rgba(255,200,230,.36);letter-spacing:1.5px;animation:fadeDown 1s 4.5s both;}
+.hint{margin-top:8px;font-style:italic;font-size:13px;color:rgba(255,200,230,.4);letter-spacing:.5px;}
 </style>
 </head>
 <body>
-
 <div id="stars"></div>
 <div class="orb orb1"></div>
 <div class="orb orb2"></div>
 <div class="orb orb3"></div>
-
 <div id="app">
-
   <div class="header">
     <p class="subtitle">✦ &nbsp; Sana Özel Bir Gün &nbsp; ✦</p>
     <h1>Meral</h1>
     <span class="date-badge">2026</span>
   </div>
-
   <div class="divider"></div>
   <div id="lineBox"></div>
-
-  <!-- unlock hint shown after poem ends -->
   <p id="unlockBanner">🌷 Şimdi çiçeklere tıklayabilirsin!</p>
-
-  <!-- 3 tulips — start LOCKED -->
   <div id="tulipRow" class="locked">
 
     <!-- T1: Pembe – sol -->
@@ -284,27 +98,27 @@ h1{
       </svg>
     </div>
 
-    <!-- T2: Sarı – merkez -->
+    <!-- T2: Beyaz – merkez -->
     <div class="tulip" id="t1" onclick="tulipClick(event,1)">
       <svg viewBox="0 0 80 220" fill="none">
         <defs>
           <radialGradient id="rg2" cx="36%" cy="26%" r="64%">
-            <stop offset="0%" stop-color="#fff9b0"/>
-            <stop offset="52%" stop-color="#f0a000"/>
-            <stop offset="100%" stop-color="#7a4000"/>
+            <stop offset="0%" stop-color="#ffffff"/>
+            <stop offset="52%" stop-color="#ede8f5"/>
+            <stop offset="100%" stop-color="#a090bc"/>
           </radialGradient>
         </defs>
         <path d="M40 220 Q40 178 40 150 Q40 120 40 86" stroke="#267026" stroke-width="6.5" stroke-linecap="round"/>
         <path d="M40 172 Q20 152 16 128 Q33 142 40 164Z" fill="#3dbb3d"/>
         <path d="M40 150 Q60 130 64 108 Q47 122 40 144Z" fill="#267026"/>
-        <ellipse cx="40" cy="62" rx="22" ry="53" fill="#7a4000" opacity=".5"/>
-        <ellipse cx="15" cy="76" rx="18" ry="46" fill="#8e4800" opacity=".6" transform="rotate(-24 15 76)"/>
-        <ellipse cx="65" cy="76" rx="18" ry="46" fill="#8e4800" opacity=".6" transform="rotate(24 65 76)"/>
+        <ellipse cx="40" cy="62" rx="22" ry="53" fill="#a090bc" opacity=".3"/>
+        <ellipse cx="15" cy="76" rx="18" ry="46" fill="#b8a8cc" opacity=".35" transform="rotate(-24 15 76)"/>
+        <ellipse cx="65" cy="76" rx="18" ry="46" fill="#b8a8cc" opacity=".35" transform="rotate(24 65 76)"/>
         <ellipse cx="22" cy="60" rx="20" ry="51" fill="url(#rg2)" transform="rotate(-13 22 60)"/>
         <ellipse cx="58" cy="60" rx="20" ry="51" fill="url(#rg2)" transform="rotate(13 58 60)"/>
         <ellipse cx="40" cy="47" rx="23" ry="55" fill="url(#rg2)"/>
-        <ellipse cx="40" cy="45" rx="11" ry="24" fill="rgba(160,80,0,.28)"/>
-        <ellipse cx="31" cy="25" rx="7" ry="17" fill="rgba(255,255,255,.44)" transform="rotate(-10 31 25)"/>
+        <ellipse cx="40" cy="45" rx="11" ry="24" fill="rgba(160,140,190,.15)"/>
+        <ellipse cx="31" cy="25" rx="7" ry="17" fill="rgba(255,255,255,.7)" transform="rotate(-10 31 25)"/>
       </svg>
     </div>
 
@@ -331,7 +145,7 @@ h1{
       </svg>
     </div>
 
-  </div><!-- end tulipRow -->
+  </div>
 
   <p class="hint" id="hintText" style="opacity:0;transition:opacity .6s ease">çiçekleri tıklamayı unutma 🌷</p>
   <p class="signature">— Muzamel 🤍</p>
@@ -343,7 +157,6 @@ h1{
 
 <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 <script>
-/* ── EmailJS ── */
 const PUBLIC_KEY="Ah-U6bLl0c8N9vY8z",SERVICE_ID="service_1",TEMPLATE_ID="template_1";
 (function(){emailjs.init(PUBLIC_KEY)})();
 window.addEventListener("load",()=>{
@@ -351,7 +164,6 @@ window.addEventListener("load",()=>{
   .then(r=>console.log("✉️",r.status),e=>console.error(e));
 });
 
-/* ── Stars ── */
 const starsEl=document.getElementById("stars");
 for(let i=0;i<80;i++){
   const s=document.createElement("div");s.className="star";
@@ -360,7 +172,6 @@ for(let i=0;i<80;i++){
   starsEl.appendChild(s);
 }
 
-/* ── Texts ── */
 const texts=[
   {t:"Sevgili Meral,",c:"greeting"},
   {t:"Bazı insanlar vardır — geldiklerinde oda aydınlanır, güldüklerinde zaman durur. Sen öyle birisin.",c:"poem"},
@@ -370,26 +181,19 @@ const texts=[
   {t:"✨ Doğum Günün Kutlu Olsun, Meral! ✨",c:"bold-msg"},
 ];
 
-/* ── Poem done → unlock tulips ── */
 function unlockTulips(){
   const row=document.getElementById("tulipRow");
   row.classList.remove("locked");
   row.classList.add("unlocked");
-  // show unlock banner
   const banner=document.getElementById("unlockBanner");
   banner.classList.add("visible");
-  // show hint
   document.getElementById("hintText").style.opacity="1";
-  // hide banner after 4s
   setTimeout(()=>{banner.style.opacity="0";banner.style.transition="opacity 1s ease"},4000);
 }
 
 let idx=0;
 function typeLine(){
-  if(idx>=texts.length){
-    unlockTulips();
-    return;
-  }
+  if(idx>=texts.length){unlockTulips();return;}
   const {t,c}=texts[idx];
   const box=document.getElementById("lineBox");
   const div=document.createElement("div");
@@ -408,12 +212,11 @@ function typeLine(){
 }
 typeLine();
 
-/* ── Tulip data ── */
 const tulipData=[
   {id:"t0",emoji:"🌸",color:"#f472b6",
     msg:"Bu pembe lale senin için — nezaketini ve içindeki o saf güzelliği hatırlatsın. 🌸"},
-  {id:"t1",emoji:"💛",color:"#fbbf24",
-    msg:"Sarı lale — girdiğin her ortama sıcaklık ve ışık katıyorsun. 🌟"},
+  {id:"t1",emoji:"🤍",color:"#ede8f5",
+    msg:"Beyaz lale — saflığını, temiz kalbini ve her zaman ışık saçan varlığını temsil ediyor. 🤍"},
   {id:"t2",emoji:"❤️",color:"#ef4444",
     msg:"Kırmızı lale — kalbindeki iyilik ve samimiyet hep böyle kalsın. ❤️"},
 ];
@@ -421,7 +224,6 @@ const tulipData=[
 const clicked=new Set();
 
 function tulipClick(e,i){
-  /* guard: only works after unlock */
   const row=document.getElementById("tulipRow");
   if(row.classList.contains("locked")) return;
   if(clicked.has(i)) return;
@@ -463,7 +265,6 @@ function tulipClick(e,i){
   }
 }
 
-/* ── Petals ── */
 const petalSet=["🌸","🌺","🌷","✨","💫","🌼"];
 setInterval(()=>{
   const p=document.createElement("div");
